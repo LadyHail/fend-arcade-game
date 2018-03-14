@@ -2,6 +2,8 @@ const OFFSCREEN_X = 505;
 const OFFSCREEN_Y = 606;
 const COLLIDER = 60;
 let playerHitbox = new Object();
+let lives = 3;
+let score = 0;
 
 class Character {
     constructor(posX = 0, posY = 0, speed = 100, sprite) {
@@ -112,13 +114,16 @@ class Player extends Character {
             case 'enemy':
                 this.reset();
                 ui.removeLive();
+                ui.addScore(-500);
                 break;
             case 'heart':
                 obj.posX = -200;
                 ui.addLive();
+                ui.addScore(250);
                 break;
             case 'star':
                 obj.posX = -200;
+                ui.addScore(500);
                 break;
         }
     }
@@ -131,6 +136,7 @@ class Player extends Character {
     win() {
         if (player.posY < 0) {
             this.reset();
+            ui.addScore(1000);
         }
     }
 }
@@ -155,40 +161,48 @@ class GameObject {
 }
 
 class UI {
-    constructor() {
-        this.lives = 3;
-    }
+    constructor() {}
     render() {
-        ctx.fillRect(0, OFFSCREEN_Y - 50, OFFSCREEN_X, 50);
-        ctx.fillStyle = 'orange';
         this.drawLives();
-    }
-
-    update() {
-        
+        this.drawScore();
     }
 
     drawLives() {
         let posX = 0;
-        for (var i = 1; i <= this.lives; i++) {
-            ctx.drawImage(Resources.get('images/Heart.png'), posX, OFFSCREEN_Y - 65, 50, 75);
+        for (var i = 1; i <= lives; i++) {
+            ctx.drawImage(Resources.get('images/Heart.png'), posX, OFFSCREEN_Y - 80, 50, 75);
             posX += 45;
         }
     }
 
+    drawScore() {
+        ctx.font = '30px Arial';
+        ctx.textAlign = 'right';
+        ctx.fillText('Score: ' + score, 500, OFFSCREEN_Y - 30);
+    }
+
     addLive() {
-        if (this.lives < 3) {
-            this.lives++;
+        if (lives < 3) {
+            lives++;
             this.drawLives();
         }
     }
 
     removeLive() {
-        this.lives--;
+        lives--;
         this.drawLives();
-        if (this.lives === 0) {
+        if (lives === 0) {
             this.gameOver();
         }
+    }
+
+    addScore(val) {
+        score += val;
+    }
+
+    gameOver() {
+        alert('Game Over');
+        location = location;
     }
 }
 

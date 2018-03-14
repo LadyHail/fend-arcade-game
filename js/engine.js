@@ -97,7 +97,6 @@ var Engine = (function(global) {
 		gameObjects.forEach(function(obj) {
             obj.update();
         });
-		ui.update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -141,7 +140,6 @@ var Engine = (function(global) {
                 ctx.drawImage(Resources.get(rowImages[row]), col * 101, row * 83);
             }
         }
-
         renderEntities();
     }
 
