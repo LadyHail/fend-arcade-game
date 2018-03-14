@@ -1,6 +1,21 @@
-frontend-nanodegree-arcade-game
-===============================
+# How to
+1. Download / clone repo
+1. Run index.html
+1. Have fun!
 
-Students should use this [rubric](https://review.udacity.com/#!/projects/2696458597/rubric) for self-checking their submission. Make sure the functions you write are **object-oriented** - either class functions (like Player and Enemy) or class prototype functions such as Enemy.prototype.checkCollisions, and that the keyword 'this' is used appropriately within your class and class prototype functions to refer to the object the function is called upon. Also be sure that the **readme.md** file is updated with your instructions on both how to 1. Run and 2. Play your arcade game.
+# Overview
+The game was made as project for Front-End Nanodegree Program at Udacity.
 
-For detailed instructions on how to get started, check out this [guide](https://docs.google.com/document/d/1v01aScPjSWCCWQLIpFqvg3-vXLH2e8_SZQKC8jNO0Dc/pub?embedded=true).
+## Functionality
+* There are Enemies and Player.
+* Players goal is to reach the water, without colliding into any one of the enemies.
+* Once the player win the game by reaching water, next level is generated.
+* After finishing level 3, amount of enemies is increased by 1 per level.
+* Player can move left, right, up and down. 
+* Player can't go off the screen.
+* Enemies move cross the screen. 
+* Once the player collides with the enemy, the game is reset and the player moves back to the start position.
+* There are collectable items: heart and star. 
+* Collectable items increase players score.
+* Once the player collides with the enemy the scoe is decreased.
+* Heart restore players live if it's less than 3.
