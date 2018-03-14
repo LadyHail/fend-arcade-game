@@ -37,6 +37,23 @@ class Enemy extends Character {
     render() {
         super.render();
     }
+
+    static randomSpeed() {
+        return Math.round(Math.random() * 100 + Math.random() * 10);
+    }
+
+    static generateNewEnemies() {
+        allEnemies = [];
+        if (ui.level <= 3) {
+            for (var i = 0; i < 3; i++) {
+                allEnemies.push(new Enemy('enemy', randomPosition()[0], randomPosition()[1], Enemy.randomSpeed()));
+            }
+        } else {
+            for (var i = 0; i < ui.level; i++) {
+                allEnemies.push(new Enemy('enemy', randomPosition()[0], randomPosition()[1], Enemy.randomSpeed()));
+            };
+        }     
+    }
 }
 
 class Player extends Character {
@@ -133,9 +150,12 @@ class Player extends Character {
 
     win() {
         if (player.posY < 0) {
+            allEnemies = [];
             this.reset();
             ui.addScore(1000);
-            ui.addLevel();
+            setTimeout(function () { //to prevent player from loosing live
+                ui.addLevel();
+            }, 10);
         }
     }
 }
@@ -218,7 +238,7 @@ class UI {
     addLevel() {
         this.level++;
         GameObject.generateNewObjects();
-        //TODO speed
+        Enemy.generateNewEnemies();
     }
 
     gameOver() {
@@ -233,16 +253,15 @@ function randomPosition() {
     return [posX, posY];
 }
 
+const ui = new UI();
 const player = new Player();
-const allEnemies = new Array();
-allEnemies.push(new Enemy('enemy', 0, 60), new Enemy('enemy', 202, 145), new Enemy('enemy', 404, 230));
+let allEnemies = new Array();
+Enemy.generateNewEnemies();
 
 let heart = new GameObject('heart', randomPosition()[0], randomPosition()[1], 'images/Heart.png');
 let star = new GameObject('star', randomPosition()[0], randomPosition()[1], 'images/Star.png');
 const gameObjects = new Array();
 gameObjects.push(heart, star);
-
-const ui = new UI();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
