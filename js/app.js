@@ -2,8 +2,6 @@ const OFFSCREEN_X = 505;
 const OFFSCREEN_Y = 606;
 const COLLIDER = 60;
 let playerHitbox = new Object();
-let lives = 3;
-let score = 0;
 
 class Character {
     constructor(posX = 0, posY = 0, speed = 100, sprite) {
@@ -137,6 +135,7 @@ class Player extends Character {
         if (player.posY < 0) {
             this.reset();
             ui.addScore(1000);
+            ui.addLevel();
         }
     }
 }
@@ -157,19 +156,29 @@ class GameObject {
         ctx.drawImage(Resources.get(this.sprite), this.posX, this.posY);
     }
 
-    
+    static generateNewObjects() {
+        gameObjects.forEach(function (obj) {
+            let newObj = new GameObject(obj.tag, randomPosition()[0], randomPosition()[1], obj.sprite);
+            gameObjects[gameObjects.indexOf(obj)] = newObj;
+        });
+    }
 }
 
 class UI {
-    constructor() {}
+    constructor() {
+        this.lives = 3;
+        this.score = 0;
+        this.level = 1;
+    }
     render() {
         this.drawLives();
         this.drawScore();
+        this.drawLevel();
     }
 
     drawLives() {
         let posX = 0;
-        for (var i = 1; i <= lives; i++) {
+        for (var i = 1; i <= this.lives; i++) {
             ctx.drawImage(Resources.get('images/Heart.png'), posX, OFFSCREEN_Y - 80, 50, 75);
             posX += 45;
         }
@@ -178,26 +187,38 @@ class UI {
     drawScore() {
         ctx.font = '30px Arial';
         ctx.textAlign = 'right';
-        ctx.fillText('Score: ' + score, 500, OFFSCREEN_Y - 30);
+        ctx.fillText('Score: ' + this.score, 500, OFFSCREEN_Y - 30);
+    }
+
+    drawLevel() {
+        ctx.font = '24px Arial';
+        ctx.textAlign = 'right';
+        ctx.fillText('Level: ' + this.level, 500, 80);
     }
 
     addLive() {
-        if (lives < 3) {
-            lives++;
+        if (this.lives < 3) {
+            this.lives++;
             this.drawLives();
         }
     }
 
     removeLive() {
-        lives--;
+        this.lives--;
         this.drawLives();
-        if (lives === 0) {
+        if (this.lives === 0) {
             this.gameOver();
         }
     }
 
     addScore(val) {
-        score += val;
+        this.score += val;
+    }
+
+    addLevel() {
+        this.level++;
+        GameObject.generateNewObjects();
+        //TODO speed
     }
 
     gameOver() {
@@ -216,8 +237,8 @@ const player = new Player();
 const allEnemies = new Array();
 allEnemies.push(new Enemy('enemy', 0, 60), new Enemy('enemy', 202, 145), new Enemy('enemy', 404, 230));
 
-const heart = new GameObject('heart', randomPosition()[0], randomPosition()[1], 'images/Heart.png');
-const star = new GameObject('star', randomPosition()[0], randomPosition()[1], 'images/Star.png');
+let heart = new GameObject('heart', randomPosition()[0], randomPosition()[1], 'images/Heart.png');
+let star = new GameObject('star', randomPosition()[0], randomPosition()[1], 'images/Star.png');
 const gameObjects = new Array();
 gameObjects.push(heart, star);
 
