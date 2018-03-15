@@ -7,8 +7,6 @@ const OFFSCREEN_Y = 606;
 // Value to use in collision detection. Minimum to work collision properly.
 const COLLIDER = 60;
 
-let playerHitbox = new Object();
-
 class Character {
     constructor(posX = 0, posY = 0, speed = 100, sprite) {
         this.posX = posX;
@@ -98,11 +96,12 @@ class Player extends Character {
 
     constructor(posX = 202, posY = 375, speed, sprite = 'images/char-boy.png') {
         super(posX, posY, speed, sprite);
+        this.playerHitbox = new Object();
     }
 
     // Every update calculate player hitbox (collision detection)
     update() {
-        playerHitbox = { posX: player.posX, posY: player.posY, size_X: Player.SIZE_X, size_Y: Player.SIZE_Y };
+        this.playerHitbox = { posX: this.posX, posY: this.posY, size_X: (this.constructor).SIZE_X, size_Y: (this.constructor).SIZE_Y };
     }
 
     render() {
@@ -113,20 +112,20 @@ class Player extends Character {
     handleInput(keyCode) {
         switch (keyCode) {
             case 'left':
-                this.posX -= this.posX > 0 ? Player.MOVE_POS_X : 0;
+                this.posX -= this.posX > 0 ? (this.constructor).MOVE_POS_X : 0;
                 break;
 
             case 'right':
-                this.posX += this.posX < 404 ? Player.MOVE_POS_X : 0;
+                this.posX += this.posX < 404 ? (this.constructor).MOVE_POS_X : 0;
                 break;
 
             case 'up':
-                this.posY -= Player.MOVE_POS_Y;
+                this.posY -= (this.constructor).MOVE_POS_Y;
                 this.win();
                 break;
 
             case 'down':
-                this.posY += this.posY < 375 ? Player.MOVE_POS_Y : 0;
+                this.posY += this.posY < 375 ? (this.constructor).MOVE_POS_Y : 0;
                 break;
         }
     }
@@ -135,11 +134,11 @@ class Player extends Character {
     checkCollision(obj) {
         const objectHitbox = { posX: obj.posX, posY: obj.posY, collider: COLLIDER };
 
-        if (playerHitbox.posX < objectHitbox.posX + objectHitbox.collider &&
-            playerHitbox.posX + playerHitbox.size_X > objectHitbox.posX &&
-            playerHitbox.posY < objectHitbox.posY + objectHitbox.collider &&
-            playerHitbox.posY + playerHitbox.size_Y > objectHitbox.posY) {
-            player.collision(obj);
+        if (this.playerHitbox.posX < objectHitbox.posX + objectHitbox.collider &&
+            this.playerHitbox.posX + this.playerHitbox.size_X > objectHitbox.posX &&
+            this.playerHitbox.posY < objectHitbox.posY + objectHitbox.collider &&
+            this.playerHitbox.posY + this.playerHitbox.size_Y > objectHitbox.posY) {
+            this.collision(obj);
         }
     }
 
@@ -165,12 +164,12 @@ class Player extends Character {
 
     // Reset player to starting position
     reset() {
-        this.posX = Player.START_X;
-        this.posY = Player.START_Y;
+        this.posX = (this.constructor).START_X;
+        this.posY = (this.constructor).START_Y;
     }
 
     win() {
-        if (player.posY < 0) {
+        if (this.posY < 0) {
             allEnemies = []; // need to be clear before player can get reset()
             this.reset();
             ui.addScore(1000);
