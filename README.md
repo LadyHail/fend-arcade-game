@@ -1,3 +1,5 @@
+### The game is hosted at: https://ladyhail.github.io/fend-arcade-game/
+
 # How to
 1. Download / clone repo
 1. Run index.html
